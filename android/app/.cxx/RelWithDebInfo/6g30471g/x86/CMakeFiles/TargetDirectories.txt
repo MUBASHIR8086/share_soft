@@ -1,0 +1,2 @@
+C:/Users/Munavar/Desktop/firebsase/shersoft-task/android/app/.cxx/RelWithDebInfo/6g30471g/x86/CMakeFiles/edit_cache.dir
+C:/Users/Munavar/Desktop/firebsase/shersoft-task/android/app/.cxx/RelWithDebInfo/6g30471g/x86/CMakeFiles/rebuild_cache.dir
