@@ -19,3 +19,9 @@ Future<void> getData() async {
   valueNotifier.value.addAll(db.values);
   valueNotifier.notifyListeners();
 }
+
+Future<void> removedata(int index) async {
+  final db = await Hive.openBox<UserAcoountDb>('user-db');
+  await db.deleteAt(index);
+  getData();
+}

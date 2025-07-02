@@ -1,0 +1,2 @@
+C:/Users/Munavar/Desktop/flutter projects/animations/share_soft/android/app/.cxx/RelWithDebInfo/355u395e/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Munavar/Desktop/flutter projects/animations/share_soft/android/app/.cxx/RelWithDebInfo/355u395e/armeabi-v7a/CMakeFiles/rebuild_cache.dir

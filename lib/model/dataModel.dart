@@ -1,27 +1,44 @@
 class Datamodel {
-  String? date;
-  String? cashIn;
-  String? cashout;
-  String? day;
-  String time;
-  String? uid;
+  final String? id;
+  final String? cashIn;
+  final String? cashout;
+  final String? date;
+  final String? day;
+  final String? uid;
+  final String? time;
+  final String? particular;
+
   Datamodel({
+    this.id,
+    this.cashIn,
+    this.cashout,
+    this.date,
+    this.day,
     this.uid,
-    required this.cashIn, required this.cashout, required this.date,required this.day,required this.time});
-  factory Datamodel.fromFireBase(Map<String, dynamic> docs) {
+    this.time,
+    this.particular,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'cashIn': cashIn,
+        'cashout': cashout,
+        'date': date,
+        'day': day,
+        'uid': uid,
+        'time': time,
+        'particular': particular,
+      };
+
+  factory Datamodel.fromJson(Map<String, dynamic> json, String id) {
     return Datamodel(
-      day: docs['day'],
-      time: docs['time'],
-        cashIn: docs['cashin'], cashout: docs['cashout'], date: docs['date']);
-  }
-  Map<String,dynamic> toJson(){
-    return {
-      'date':date,
-      'time':time,
-      'day':day,
-      'cashout':cashout,
-      'cashin':cashIn,
-      'userId':uid,
-    };
+      id: id,
+      cashIn: json['cashIn'],
+      cashout: json['cashout'],
+      date: json['date'],
+      day: json['day'],
+      uid: json['uid'],
+      time: json['time'],
+      particular: json['particular'],
+    );
   }
 }

@@ -18,18 +18,18 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _checkLoginStatus() async {
-    await Future.delayed(Duration(seconds: 2)); 
-    User? user = FirebaseAuth.instance.currentUser; 
+    await Future.delayed(Duration(seconds: 2));
+    User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Homepage()), 
+        MaterialPageRoute(builder: (context) => Homepage()),
       );
     } else {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()), 
+        MaterialPageRoute(builder: (context) => LoginPage()),
       );
     }
   }
@@ -38,11 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-   child: Text("Splash screen",style: TextStyle(
-    fontWeight: FontWeight.bold,
-    fontSize: 18,
-   ),),
-      ),
+          child: Image.asset(
+        "asset/unnamed-removebg-preview.png",
+        height: 300,
+        width: 300,
+      )),
     );
   }
 }

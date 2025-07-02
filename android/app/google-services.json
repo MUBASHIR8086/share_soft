@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "213671621035",
-    "project_id": "mechinetask",
-    "storage_bucket": "mechinetask.firebasestorage.app"
+    "project_number": "81063252924",
+    "project_id": "sharesoft-4bd13",
+    "storage_bucket": "sharesoft-4bd13.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:213671621035:android:7159e7fa3ab863e62922ee",
+        "mobilesdk_app_id": "1:81063252924:android:2d3ddb479c906e7dba11b9",
         "android_client_info": {
           "package_name": "com.example.shersoft"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDIEYll2oGbT0Fh8CuTCsBaTfnILT9gcGM"
+          "current_key": "AIzaSyDtqiipySV4-BaT0JUpfIo524tW10yt5XM"
         }
       ],
       "services": {

@@ -1,66 +1,410 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shersoft/backup/backup.dart';
+import 'package:shersoft/constants/colors.dart';
+import 'package:shersoft/controller/dataController.dart';
 import 'package:shersoft/controller/login.dart';
-import 'package:shersoft/view/home/accounts.dart';
-import 'package:shersoft/view/home/backup&restore.dart';
+import 'package:shersoft/view/Monthlydata/printmonth.dart';
+import 'package:shersoft/view/Settings/settingss.dart';
+import 'package:shersoft/view/about/about.dart';
+import 'package:shersoft/view/account/accounts.dart';
+import 'package:shersoft/view/privacypoli.dart/privacy.dart';
+import 'package:shersoft/view/totelscreentime/screentime.dart';
 
-Drawer drawer({BuildContext? context,String? company,String? phone}) {
+Drawer drawer({BuildContext? context, String? company, String? phone}) {
   return Drawer(
-    child: Center(
-        child: Column(
+    backgroundColor: Colors.white,
+    child: Column(
       children: [
+        // Enhanced Header
         Container(
-          child: Column(
-            spacing: 20,
-            children: [
-              SizedBox(
-                height: 30,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Appcolors.backgroundblue,
+                Appcolors.backgroundblue.withOpacity(0.8),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Appcolors.backgroundblue.withOpacity(0.3),
+                spreadRadius: 1,
+                blurRadius: 8,
+                offset: Offset(0, 3),
               ),
-              Text(company??'',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                color: Colors.white
-              ),),
-              Text(phone??'',style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-              ),)
             ],
           ),
-          color: const Color.fromARGB(255, 36, 44, 201),
-          height: 200,
+          height: 220,
           width: double.infinity,
+          child: SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Company Logo/Avatar
+                Container(
+                  padding: EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.withOpacity(0.2),
+                  ),
+                  child: CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.business,
+                      size: 40,
+                      color: Appcolors.backgroundblue,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Text(
+                  company ?? 'Company Name',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22,
+                    color: Colors.white,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(
+                    phone ?? '+91 0000000000',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        ListTile(
-          onTap: () => Navigator.push(
-              context!, MaterialPageRoute(builder: (context) => AccountsPage())),
-          title: Text("Accounts"),
-          leading: Icon(Icons.groups_outlined),
+
+        // Menu Items
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.symmetric(vertical: 10),
+            children: [
+              _buildDrawerItem(
+                icon: Icons.groups_outlined,
+                title: "Accounts",
+                onTap: () => Navigator.push(context!,
+                    MaterialPageRoute(builder: (context) => AccountsPage())),
+                iconColor: Colors.blue,
+              ),
+              _buildDrawerItem(
+                icon: Icons.settings,
+                title: "Settings",
+                onTap: () {
+                  Navigator.push(context!,
+                      MaterialPageRoute(builder: (context) => SettingsPage()));
+                },
+                iconColor: Colors.grey[700],
+              ),
+              _buildDrawerItem(
+                icon: Icons.privacy_tip_outlined,
+                title: "Privacy Policy",
+                onTap: () {
+                  Navigator.push(
+                      context!,
+                      MaterialPageRoute(
+                          builder: (context) => PrivacyPolicyPage()));
+                },
+                iconColor: Colors.green,
+              ),
+              _buildDrawerItem(
+                icon: Icons.picture_as_pdf,
+                title: "Monthly Report PDF",
+                onTap: () async {
+                  final selectedMonth = await showDialog<String>(
+                    context: context!,
+                    builder: (BuildContext context) {
+                      String? dropdownValue;
+                      return Dialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.calendar_month,
+                                size: 50,
+                                color: Appcolors.backgroundblue,
+                              ),
+                              SizedBox(height: 15),
+                              Text(
+                                'Select Month',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              StatefulBuilder(
+                                builder: (context, setState) {
+                                  return Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 12),
+                                    decoration: BoxDecoration(
+                                      border:
+                                          Border.all(color: Colors.grey[300]!),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: DropdownButton<String>(
+                                      hint: const Text("Choose Month"),
+                                      value: dropdownValue,
+                                      isExpanded: true,
+                                      underline: SizedBox(),
+                                      icon: Icon(Icons.arrow_drop_down,
+                                          color: Appcolors.backgroundblue),
+                                      items: [
+                                        'January',
+                                        'February',
+                                        'March',
+                                        'April',
+                                        'May',
+                                        'June',
+                                        'July',
+                                        'August',
+                                        'September',
+                                        'October',
+                                        'November',
+                                        'December',
+                                      ].map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                      onChanged: (newValue) {
+                                        setState(() {
+                                          dropdownValue = newValue;
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 25),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(context, null),
+                                    child: Text(
+                                      "Cancel",
+                                      style: TextStyle(
+                                        color: Colors.grey[600],
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Appcolors.backgroundblue,
+                                      elevation: 3,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () =>
+                                        Navigator.pop(context, dropdownValue),
+                                    child: Text(
+                                      "Generate",
+                                      style: TextStyle(
+                                        color: Appcolors.whitecolors,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+
+                  if (selectedMonth != null) {
+                    final datacontroller =
+                        Provider.of<Datacontroller>(context!, listen: false);
+
+                    await datacontroller.getdata('Monthly', selectedMonth);
+
+                    generateMonthlyPdfReport(
+                      context,
+                      company: 'Budgetly',
+                      selectedMonth: selectedMonth,
+                    );
+                  }
+                },
+                iconColor: Colors.red,
+              ),
+              _buildDrawerItem(
+                icon: Icons.screen_lock_portrait,
+                title: 'Screen Time',
+                onTap: () => Navigator.push(
+                  context!,
+                  MaterialPageRoute(builder: (context) => AppUsageStatsPage()),
+                ),
+                iconColor: Colors.purple,
+              ),
+              _buildDrawerItem(
+                icon: Icons.cloud_upload,
+                title: 'Cloud Backup',
+                onTap: () => Navigator.push(
+                  context!,
+                  MaterialPageRoute(builder: (context) => CloudBackupPage()),
+                ),
+                iconColor: Colors.teal,
+              ),
+              _buildDrawerItem(
+                icon: Icons.info_outline,
+                title: "About",
+                onTap: () {
+                  Navigator.push(
+                      context!,
+                      MaterialPageRoute(
+                          builder: (context) => DetailedAboutPage()));
+                },
+                iconColor: Colors.orange,
+              ),
+              Divider(
+                thickness: 1,
+                height: 30,
+                color: Colors.grey[300],
+                indent: 20,
+                endIndent: 20,
+              ),
+              _buildDrawerItem(
+                icon: Icons.logout,
+                title: "Logout",
+                onTap: () {
+                  // Show confirmation dialog
+                  showDialog(
+                    context: context!,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        title: Row(
+                          children: [
+                            Icon(Icons.logout, color: Colors.red),
+                            SizedBox(width: 10),
+                            Text("Logout"),
+                          ],
+                        ),
+                        content: Text("Are you sure you want to logout?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text("Cancel"),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Provider.of<UserController>(context,
+                                      listen: false)
+                                  .logoutUser(context);
+                            },
+                            child: Text("Logout",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                iconColor: Colors.red,
+                showTrailing: false,
+              ),
+            ],
+          ),
         ),
-        ListTile(
-          title: Text("Transfer"),
-          leading: Icon(Icons.track_changes),
-        ),
-        ListTile(
-          onTap: () {
-            Navigator.push(context!, MaterialPageRoute(builder: (context)=>BackupandRestore()));
-          },
-          title: Text("Backup and Restore"),
-          leading: Icon(Icons.settings_backup_restore),
-        ),
-        ListTile(
-          title: Text("Settings"),
-          leading: Icon(Icons.settings_outlined),
-        ),
-        ListTile(
-          onTap: () {
-            Provider.of<UserController>(context!, listen: false)
-                .logoutUser(context);
-          },
-          title: Text("Logout"),
-          leading: Icon(Icons.logout),
-        )
       ],
-    )),
+    ),
+  );
+}
+
+Widget _buildDrawerItem({
+  required IconData icon,
+  required String title,
+  required VoidCallback onTap,
+  Color? iconColor,
+  bool showTrailing = true,
+}) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: (iconColor ?? Colors.grey).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  size: 24,
+                  color: iconColor ?? Colors.grey[700],
+                ),
+              ),
+              SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[800],
+                  ),
+                ),
+              ),
+              if (showTrailing)
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.grey[400],
+                ),
+            ],
+          ),
+        ),
+      ),
+    ),
   );
 }
